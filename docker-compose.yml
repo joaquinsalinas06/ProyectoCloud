@@ -2,32 +2,32 @@ version: '3.9'
 services:
   mongo:
     image: mongo:latest
-    container_name: mongo
+    container_name: mongo-db
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_DATABASE: database
+      MONGO_INITDB_DATABASE: mydatabase
     volumes:
       - mongo-data:/data/db
 
-  db:
+  postgres:
     image: postgres:15-alpine
     container_name: postgres-db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: order
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  mysql-db:
+  mysql:
     image: mysql:8.0
     container_name: mysql-db
     environment:
@@ -43,5 +43,5 @@ services:
 
 volumes:
   mongo-data:
-  postgres_data:
+  postgres-data:
   mysql-data:
