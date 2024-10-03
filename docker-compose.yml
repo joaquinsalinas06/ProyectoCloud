@@ -5,17 +5,17 @@ services:
     container_name: mongo-db
     ports:
       - "27017:27017"
-    environment:
-      MONGO_INITDB_DATABASE: mydatabase
     volumes:
       - mongo-data:/data/db
+    networks:
+      - backend-network
 
   postgres:
     image: postgres:15-alpine
     container_name: postgres-db
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_PASSWORD: ""
       POSTGRES_DB: mydb
     ports:
       - "5432:5432"
@@ -26,22 +26,30 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - backend-network
 
   mysql:
     image: mysql:8.0
     container_name: mysql-db
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_ROOT_PASSWORD: ""
       MYSQL_DATABASE: userdb
       MYSQL_USER: user
-      MYSQL_PASSWORD: userpassword
+      MYSQL_PASSWORD: "" 
     ports:
-      - "8005:3306" 
+      - "8005:3306"
     volumes:
       - mysql-data:/var/lib/mysql
       - ./CloudDB-User.sql:/docker-entrypoint-initdb.d/CloudDB-User.sql
+    networks:
+      - backend-network
 
 volumes:
   mongo-data:
   postgres-data:
   mysql-data:
+
+networks:
+  backend-network:
+    external: true
