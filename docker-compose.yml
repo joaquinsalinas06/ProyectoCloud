@@ -29,6 +29,7 @@ services:
     image: mysql:8.0
     container_name: mysql-db
     environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: userdb
       MYSQL_USER: user
       MYSQL_PASSWORD: userpassword
